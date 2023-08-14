@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<html>
+    <head><title>ATM Transactions</title>
+        <meta charset=utf-8>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
+    </head>
+<body>
+    <img src="/static/Makai-atm.png" alt="header" width="1150" height="450"><br><br>
+
+    <h1>{{ user.fname }} {{ user.lname }}</h1>
+    <p>Debit Card: {{ user.cardNumber }}</p>
+    <p>User ID: {{ user.userID }}</p>
+
+    <form action="/submit_transaction" method="post">
+        <label for="starting_balance">Account Balance:</label>
+        <input type="text" id="starting_balance" name="starting_balance" value="{{ starting_balance }}" readonly><br>
+        <label for="deposit">Deposit:</label>
+        <input type="text" id="deposit" name="deposit"><br><br><br>
+        <label for="withdraw">Withdraw:</label>
+        <input type="text" id="withdraw" name="withdraw"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <p id = "ending_balance" >Ending balance: ${{ ending_balance }} </p>
+
+    <p>Transactions:</p>
+    {% for tx, balance in transactions_with_balances %}
+    <p>Transactions {{ loop.index }} - {{ tx.type }} ${{ tx.amount }} - Balance ${{ balance }}</p>
+    {% endfor %}
+</body>
+</html>
